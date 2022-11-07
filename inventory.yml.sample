@@ -1,0 +1,7 @@
+all:
+  hosts: 
+    sui_fullnode:
+      ansible_host: 000.000.00.00
+  vars: 
+    ansible_user: ubuntu
+    ansible_port: 22

@@ -1,0 +1,46 @@
+- name: Clone the SUI repo
+  ansible.builtin.git:
+    repo: https://github.com/MystenLabs/sui.git
+    dest: "{{ sui_user_dir}}/sui"
+    clone: yes
+    update: yes
+    version: "{{ sui_target_branch }}"
+  become: yes
+  become_user: "{{ sui_user }}"
+
+
+- name: Creates fullnode directory
+  file:
+    path: "{{ sui_fullnode_dir }}"
+    state: directory
+  become: yes
+  become_user: "{{ sui_user }}"
+
+- name: Copy fullnode yaml file
+  become: true
+  template:
+    src: 'sui.fullnode.yaml.j2'
+    dest: "{{ sui_user_dir }}/sui-fullnode/fullnode.yaml"
+    owner: "{{ sui_user }}"
+    group: 'root'
+    mode: '0644'
+
+- name: Get genesis blob
+  ansible.builtin.command: curl -fLJO https://github.com/MystenLabs/sui-genesis/raw/main/devnet/genesis.blob
+  become: yes
+  become_user: "{{ sui_user }}"
+  args:
+    chdir: "{{ sui_fullnode_dir }}"
+
+- name: Allow all access to tcp port 9000
+  community.general.ufw:
+    rule: allow
+    port: '9000'
+    proto: tcp
+
+- name: Allow all access to tcp port 9184 for metrics
+  community.general.ufw:
+    rule: allow
+    port: '9184'
+    proto: tcp
+

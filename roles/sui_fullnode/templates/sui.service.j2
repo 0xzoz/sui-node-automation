@@ -1,0 +1,13 @@
+[Unit]
+Description=sui service
+After=network.target
+Wants=network-online.target systemd-networkd-wait-online.service
+
+[Service]
+User={{ sui_user }}
+WorkingDirectory={{ sui_user_dir }}/sui
+ExecStart={{ sui_user_dir }}/.cargo/bin/sui-node --config-path {{ sui_user_dir }}/sui-fullnode/fullnode.yaml
+
+
+[Install]
+WantedBy=default.target
