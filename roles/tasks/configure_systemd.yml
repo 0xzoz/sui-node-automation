@@ -1,0 +1,17 @@
+- name: Deploy /etc/systemd/system/sui.service
+  become: true
+  template:
+    src: 'sui.service.j2'
+    dest: '/etc/systemd/system/sui.service'
+    owner: 'root'
+    group: 'root'
+    mode: '0644'
+  notify: daemon-reload
+
+- name: Enable and start sui service
+  become: true
+  systemd:
+    name: sui.service
+    enabled: yes
+    state: started
+    daemon_reload: yes
