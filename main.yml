@@ -1,0 +1,18 @@
+- name: Main
+  hosts: '{{ target }}'
+  gather_facts: false
+  roles:
+    # - role: 'base_server' TODO: Add security to the underlying server
+    #   tags: 'base_server'
+    #   become: true
+    # - role: 'monitor' TODO: Add monitoring to the node for the machine and sui system
+    #   tags: 'monitor'
+    #   become: true
+    - role: 'sui_fullnode'
+      tags: 'sui_fullnode'
+      become: true
+    
+  handlers:
+      - name: daemon-reload
+        command: systemctl daemon-reload
+        become: true

@@ -1,0 +1,11 @@
+- name: Build and install sui from source
+  import_tasks: build_sui.yml
+  tags: "build_sui"
+
+- name: Configure sui 
+  import_tasks: configure_sui.yml
+  tags: "configure_sui"
+
+- name: Configure sui systemd and start
+  import_tasks: configure_systemd.yml
+  tags: "configure_sui_systemd"
